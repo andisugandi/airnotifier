@@ -28,8 +28,9 @@ Please read [Installation guide](https://github.com/airnotifier/airnotifier/wiki
 
 ## Requirements
 
-- [Python 3.6](http://www.python.org)
+- [Python 3.9](http://www.python.org)
 - [MongoDB 4.0+](http://www.mongodb.org/)
 
 ## Copyright
 Copyright (c) Dongsheng Cai and individual contributors
+Copyright (c) Georg Glas 2024
