@@ -6,11 +6,11 @@ ENV DEBIAN_FRONTEND=noninteractive TERM=linux
 EXPOSE 8801
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends git ca-certificates
+    apt-get install -y --no-install-recommends git ca-certificates python3-dev python3
 
 RUN pip3 install pipenv
 
-RUN git clone -b 2.x https://github.com/airnotifier/airnotifier.git /airnotifier
+COPY . /airnotifier
 RUN mkdir -p /var/airnotifier/pemdir && \
     mkdir -p /var/log/airnotifier
 
