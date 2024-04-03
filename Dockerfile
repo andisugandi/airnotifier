@@ -8,6 +8,7 @@ EXPOSE 8801
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git ca-certificates python3-dev python3
 
+
 RUN pip3 install pipenv
 
 COPY . /airnotifier
@@ -21,4 +22,6 @@ RUN pipenv install --deploy
 
 ADD start.sh /airnotifier
 RUN chmod a+x /airnotifier/start.sh
+RUN chmod a+x /airnotifier/install.py
+RUN chmod a+x /airnotifier/app.py
 ENTRYPOINT /airnotifier/start.sh
