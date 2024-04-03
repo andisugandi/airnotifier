@@ -12,8 +12,8 @@ services:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/tmp/mongo/mongo.log
     volumes:
-      - ./mongo/data:/data/db
-      - ./mongo/log:/tmp/mongo
+      - ${MONGO_DATA:-../var/mongo/data}:/data/db
+      - ${MONGO_LOG:-../var/mongo/log}:/tmp/mongo
     command: mongod --logpath=/dev/null # --quiet
   airnotifier:
     links:
@@ -23,8 +23,8 @@ services:
     build: .
     container_name: airnotifier
     volumes:
-      - ./certs:/var/airnotifier/pemdir
-      - ./logs:/var/log/airnotifier
+      - ${AIRNOTIFIER_CERTS:-../var/airnotifier/certs}:/var/airnotifier/pemdir
+      - ${AIRNOTIFIER_LOGS:-../var/airnotifier/logs}:/var/log/airnotifier
     ports:
       - 8801:8801
     environment:
