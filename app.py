@@ -70,7 +70,7 @@ if __name__ == "__main__":
     if options.sentrydsn:
         sentry_sdk.init(dsn=options.sentrydsn, integrations=[TornadoIntegration()])
     else:
-        logging.warn("Sentry dsn is not set")
+        logging.warning("Sentry dsn is not set")
 
     mongodb = None
     while not mongodb:

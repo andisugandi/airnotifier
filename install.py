@@ -61,7 +61,7 @@ if __name__ == "__main__":
     mongodb = pymongo.MongoClient(options.mongouri)
     masterdb = mongodb[options.masterdb]
 
-    collection_names = masterdb.collection_names()
+    collection_names = masterdb.list_collection_names()
     try:
         if not "applications" in collection_names:
             masterdb.create_collection("applications")
