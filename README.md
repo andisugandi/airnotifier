@@ -23,6 +23,10 @@ AirNotifier is a user friendly yet powerful application server for sending real-
 
 Please read [Installation guide](https://github.com/airnotifier/airnotifier/wiki/Installation)
 
+## Rebuilding Docker container
+
+use ```docker-compose up --build``` to rebuild docker image
+
 ## Web service documentation
 - [Web service interfaces](https://github.com/airnotifier/airnotifier/wiki/API)
 
