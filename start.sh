@@ -23,6 +23,8 @@ if [ ! -f "${LOGDIR}/${LOGFILE_ERR}" ]; then
    ln -sf /dev/stderr "${LOGDIR}/${LOGFILE_ERR}"
 fi
 
+echo "MONGO_SERVER: ${MONGO_SERVER-localhost}"
+echo "MONGO_PORT: ${MONGO_PORT-27017}"
 
 sed -i "s/mongouri = \"mongodb:\/\/localhost:27017\/\"/mongouri = \"mongodb:\/\/${MONGO_SERVER-localhost}:${MONGO_PORT-27017}\/\"/g" ./config.py
 sed -i "s/mongohost = \"localhost\"/mongohost = \"mongodb\"/g"  ./config.py

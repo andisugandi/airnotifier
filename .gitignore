@@ -10,3 +10,4 @@ config.py
 mongo/
 logs/
 *~
+.env
