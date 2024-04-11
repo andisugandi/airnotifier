@@ -27,13 +27,16 @@ MONGO_PORT=${MONGO_PORT-27017}
 AIRNOTIFIER_PASSWORDSALT=${AIRNOTIFIER_PASSWORDSALT-$(echo ${__defaultpassordsalt})}
 AIRNOTIFIER_COOKIESECRETS=${AIRNOTIFIER_COOKIESECRETS-$(echo ${__defaultcookiesecret})}
 MONGO_PROTOCOL=${MONGO_PROTOCOL-mongodb}
+if [ ! -z "${MONGO_CA_PATH}" ]; then
+	__MONGO_SSL="\&tlsCAFile=${MONGO_CA_PATH}"
+fi
 if [ ! -z "${MONGO_USER}" ]; then
-	MONGO_URL=${MONGO_PROTOCOL}://${MONGO_USER}:${MONGO_PASS}@${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DATABASE}?${MONGO_OPTIONS}
+	MONGO_URL=${MONGO_PROTOCOL}://${MONGO_USER}:${MONGO_PASS}@${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DATABASE}?${MONGO_OPTIONS}${__MONGO_SSL}
 else
-	MONGO_URL=${MONGO_PROTOCOL}://${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DATABASE}?${MONGO_OPTIONS}
+	MONGO_URL=${MONGO_PROTOCOL}://${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DATABASE}?${MONGO_OPTIONS}${__MONGO_SSL}
 fi
 #MONGO_URL_REGEX=$(echo "${MONGO_URL}"|sed "s#\\/#\\\\/#g"|sed "s#\\+#%2B#g"|sed "s#&#%26#g"|sed "s:=:%3D:g")
-MONGO_URL_REGEX=$(echo "${MONGO_URL}"|sed "s#\\/#\\\\/#g"|sed "s#\\+#%2B#g"|sed "s#&#%26#g")
+MONGO_URL_REGEX=$(echo "${MONGO_URL}"|sed "s#\\/#\\\\/#g"|sed "s#\\+#%2B#g")
 echo "MONGO_URL_REGEX: ${MONGO_URL_REGEX}"
 if [ ! -f "./config.py" ]; then
   cp config.py-sample config.py
@@ -45,16 +48,16 @@ if [ ! -f "./logging.ini" ]; then
   cp logging.ini-sample logging.ini
 fi
 
-if [ ! -f "${LOGDIR}/${LOGFILE}" ]; then
+if [ ! -f "${LOGDIR}/${LOGFILE}" ] && [ ! -z "${LOGDIR}" ] && [ ! -z "${LOGFILE}"]; then
    ln -sf /dev/stdout "${LOGDIR}/${LOGFILE}"
 fi
 
-if [ ! -f "${LOGDIR}/${LOGFILE_ERR}" ]; then
+if [ ! -f "${LOGDIR}/${LOGFILE_ERR}" ] && [ ! -z "${LOGDIR}" ] && [ ! -z "${LOGFILE_ERR}"]; then
    ln -sf /dev/stderr "${LOGDIR}/${LOGFILE_ERR}"
 fi
 
 # update config.py with our settings (make sure to update these strings if you update config.py-sample
-sed -i "s/mongouri = \"mongodb:\/\/localhost:27017\/\"/mongouri = \"${MONGO_URL_REGEX}\"/g" ./config.py
+sed -i "s#mongouri = \"mongodb:\/\/localhost:27017\/\"#mongouri = \"${MONGO_URL_REGEX}\"#g" ./config.py
 sed -i "s/mongohost = \"localhost\"/mongohost = \"mongodb\"/g"  ./config.py
 sed -i "s/passwordsalt = \'d2o0n1g2s0h3e1n1g\'/passwordsalt = \'${AIRNOTIFIER_PASSWORDSALT}\'/g" ./config.py
 sed -i "s/cookiesecret = \'airnotifiercookiesecret\'/cookiesecret = \'${AIRNOTIFIER_COOKIESECRETS}\'/g"  ./config.py
@@ -79,5 +82,6 @@ pipenv run ./install.py
 echo "Starting AirNotifier ..."
 __starttimestamp=`date +%s.%N`
 pipenv run ./app.py 
+__endtimestamp=`date +%s.%N`
 __runtime=$( echo "${__endtimestamp} - ${__starttimestamp}" | bc -l )
 echo ${__runtime}
