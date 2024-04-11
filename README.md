@@ -25,7 +25,8 @@ Please read [Installation guide](https://github.com/airnotifier/airnotifier/wiki
 
 ## Rebuilding Docker container
 
-use ```docker-compose up --build``` to rebuild docker image
+use ```docker-compose up --build``` to rebuild docker image delete volume
+first ```docker volume ls``` and ```docker volume rm ....```
 
 ## Web service documentation
 - [Web service interfaces](https://github.com/airnotifier/airnotifier/wiki/API)
