@@ -36,7 +36,7 @@ else
 	MONGO_URL=${MONGO_PROTOCOL}://${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DATABASE}?${MONGO_OPTIONS}${__MONGO_SSL}
 fi
 #MONGO_URL_REGEX=$(echo "${MONGO_URL}"|sed "s#\\/#\\\\/#g"|sed "s#\\+#%2B#g"|sed "s#&#%26#g"|sed "s:=:%3D:g")
-MONGO_URL_REGEX=$(echo "${MONGO_URL}"|sed "s#\\/#\\\\/#g"|sed "s#\\+#%2B#g")
+MONGO_URL_REGEX=$(echo "${MONGO_URL}"|sed "s#\\/#\\\\/#g"|sed "s#\\+#%2B#g"|sed "s#^mongodb%2Bsrv:#mongodb\\+srv:#g")
 echo "MONGO_URL_REGEX: ${MONGO_URL_REGEX}"
 if [ ! -f "./config.py" ]; then
   cp config.py-sample config.py
@@ -63,6 +63,9 @@ sed -i "s/passwordsalt = \'d2o0n1g2s0h3e1n1g\'/passwordsalt = \'${AIRNOTIFIER_PA
 sed -i "s/cookiesecret = \'airnotifiercookiesecret\'/cookiesecret = \'${AIRNOTIFIER_COOKIESECRETS}\'/g"  ./config.py
 
 # provide configuration settings to user
+if [ -f .git/index ]; then 
+	echo "GIT_ID: "$(git rev-parse --verify HEAD)
+fi
 echo "MONGO_SERVER: ${MONGO_SERVER}"
 echo "MONGO_PORT: ${MONGO_PORT}"
 echo "AIRNOTIFIER_PASSWORDSALT: ${AIRNOTIFIER_PASSWORDSALT}"
