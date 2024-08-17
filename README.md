@@ -30,7 +30,7 @@ first ```docker volume ls``` and ```docker volume rm ....```
 
 ## Deploying on Docker Swarm Cluster
 
-The [docker-compose-SwarmWithTraefik.yml](https://github.com/andisugandi/airnotifier/blob/main/docker-compose-SwarmWithTraefik.yml) file is an example working scenario on deploying Airnotifier instance on [Docker Swarm cluster](https://docs.docker.com/engine/swarm/swarm-tutorial/) with the help of [Traefik](https://traefik.io/traefik/) as reverse proxy (see [the example deployment](https://tech.aufomm.com/traefik/)).
+The [docker-compose-SwarmWithTraefik.yml](https://github.com/andisugandi/airnotifier/blob/master/docker-compose-SwarmWithTraefik.yml) file is an example working scenario on deploying Airnotifier instance on [Docker Swarm cluster](https://docs.docker.com/engine/swarm/swarm-tutorial/) with the help of [Traefik](https://traefik.io/traefik/) as reverse proxy (see [the example deployment](https://tech.aufomm.com/traefik/)).
 
 - Get the persitent volumes ready
 
