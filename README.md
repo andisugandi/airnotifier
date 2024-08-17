@@ -28,6 +28,28 @@ Please read [Installation guide](https://github.com/airnotifier/airnotifier/wiki
 use ```docker-compose up --build``` to rebuild docker image delete volume
 first ```docker volume ls``` and ```docker volume rm ....```
 
+## Deploying on Docker Swarm Cluster
+
+The [docker-compose-SwarmWithTraefik.yml](https://github.com/andisugandi/airnotifier/blob/main/docker-compose-SwarmWithTraefik.yml) file is an example working scenario on deploying Airnotifier instance on [Docker Swarm cluster](https://docs.docker.com/engine/swarm/swarm-tutorial/) with the help of [Traefik](https://traefik.io/traefik/) as reverse proxy (see [the example deployment](https://tech.aufomm.com/traefik/)).
+
+- Get the persitent volumes ready
+
+  ~~~bash
+  mkdir -pv /path_to/airnotifier.example.com/{mongodb,certs,logs}
+  ~~~
+
+- Provide the proper permission for MongoDB
+
+  ~~~bash
+  sudo chown 1001 /path_to/airnotifier.example.com/mongodb
+  ~~~
+
+- Deploy on Docker Swarm cluster
+
+  ~~~bash
+  docker stack deploy -c docker-compose-SwarmWithTraefik.yml airnotifier-example-com
+  ~~~
+
 ## Web service documentation
 - [Web service interfaces](https://github.com/airnotifier/airnotifier/wiki/API)
 
