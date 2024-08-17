@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  mongodb:
+    image: bitnami/mongodb:4.2.21
+    volumes:
+      - /path_to/airnotifier.example.com/mongodb:/bitnami/mongodb
+    networks:
+      - airnotifiernetwork
+    deploy:
+      labels:
+        - traefik.enable=false
+      restart_policy:
+        condition: any
+    environment:
+      - ALLOW_EMPTY_PASSWORD = yes
+  airnotifier:
+    depends_on:
+      - mongodb
+    image: andisugandi/airnotifier:3
+    volumes:
+      - /path_to/airnotifier.example.com/certs:/var/airnotifier/pemdir
+      - /path_to/airnotifier.example.com/logs:/var/log/airnotifier
+    networks:
+      - airnotifiernetwork
+      - proxy
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      labels:
+          - "traefik.enable=true"
+          - "traefik.docker.network=proxy"
+          - "traefik.http.routers.airnotifier-secure.entrypoints=websecure"
+          - "traefik.http.routers.airnotifier.entrypoints=web"
+          - "traefik.http.routers.airnotifier-secure.rule=Host(`airnotifier.example.com`)"
+          - "traefik.http.routers.airnotifier.rule=Host(`airnotifier.example.com`)"
+          - "traefik.http.routers.airnotifier-secure.service=airnotifier-service"
+          - "traefik.http.routers.airnotifier-secure.tls.certResolver=letsencrypt"
+          - "traefik.http.services.airnotifier-service.loadbalancer.server.port=8801"
+    environment:
+      MONGO_SERVER: mongodb
+      MONGO_PORT: 27017
+networks:
+  airnotifiernetwork:
+  proxy:
+    external: true
+
